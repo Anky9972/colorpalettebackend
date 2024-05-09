@@ -19,13 +19,15 @@ To run this backend server locally, follow these steps:
 
 ### API Documentation
 
-- **POST /api/auth/signup:** Register a new user with the provided email and password.
-- **POST /api/auth/signin:** Sign in an existing user with the provided email and password.
-- **POST /api/auth/logout:** Log out the currently authenticated user.
-- **GET /api/palettes:** Retrieve all saved color palettes for the currently authenticated user.
-- **POST /api/palettes:** Save a new color palette for the currently authenticated user.
+- **POST /api/v1/signup:** Register a new user with the provided email and password.
+- **POST /api/v1/login:** Sign in an existing user with the provided email and password.
+- **POST /api/v1/save:** Save a single color for the currently authenticated user.
+- **POST /api/v1/savefullpalette:** Save a new color palette for the currently authenticated user.
+- **GET /api/v1/getsaved/:userId:** Retrieve all saved color for the currently authenticated user.
+- **GET /api/v1/getfullpalette/:userId:** Retrieve a all saved color palette for the currently authenticated user.
+- **GET /api/v1/image-proxy:** Proxy server to fetch images.
 
-For detailed API documentation and usage examples, refer to the documentation or API reference provided in the source code.
+
 
 ## Technologies Used
 
