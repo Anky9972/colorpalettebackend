@@ -130,18 +130,12 @@ exports.getSavedPalette = async (req, res) => {
         const { userId } = req.params;
         console.log("user id get",userId)
 
-        // Retrieve the user by userId
         const user = await User.findById(userId);
 
-        // Check if the user exists
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        // Return the saved palettes or related data for the user
-        // You need to define the structure of the saved palettes in your user model
-        // For example, if saved palettes are stored as an array in the user document,
-        // you would return that array here
         res.json({ savedPalettes: user.saved,success:true });
     } catch (error) {
         console.error(error);
@@ -154,18 +148,13 @@ exports.getFullPalette = async (req, res) => {
         const { userId } = req.params;
         console.log("user id get",userId)
 
-        // Retrieve the user by userId
         const user = await User.findById(userId);
 
-        // Check if the user exists
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        // Return the saved palettes or related data for the user
-        // You need to define the structure of the saved palettes in your user model
-        // For example, if saved palettes are stored as an array in the user document,
-        // you would return that array here
+       
         res.json({ savedPalettes: user.savefullpalette,success:true });
     } catch (error) {
         console.error(error);
