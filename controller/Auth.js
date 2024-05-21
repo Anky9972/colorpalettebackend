@@ -1,4 +1,4 @@
-// controller/Auth.js
+
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -61,6 +61,7 @@ exports.login = async (req, res) => {
         res.status(500).send(' Error in login');
     }
 };
+
 
 exports.savePalette = async (req, res) => {
     try {
