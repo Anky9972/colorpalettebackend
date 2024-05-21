@@ -28,8 +28,8 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; 
     await user.save();
 
-    const resetURL = `http://localhost:3000/reset-password/${resetPasswordToken}`;
-    const message = `You requested a password reset. Please make a PUT request to: \n\n ${resetURL}`;
+    const resetURL = `https://colorpalettebackend.onrender.com/api/v1/reset-password/${resetPasswordToken}`;
+    const message = `You requested a password reset.\n\nLink will be expired in 1hr.\n\n Here is your reset password url: \n\n ${resetURL}`;
 
     await transporter.sendMail({
       to: user.email,
