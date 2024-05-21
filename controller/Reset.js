@@ -28,7 +28,7 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; 
     await user.save();
 
-    const resetURL = `https://colorpalettebackend.onrender.com/api/v1/reset-password/${resetPasswordToken}`;
+    const resetURL = `https://colorpalettegenerate.vercel.app/reset-password/${resetPasswordToken}`;
     const message = `You requested a password reset.\n\nLink will be expired in 1hr.\n\n Here is your reset password url: \n\n ${resetURL}`;
 
     await transporter.sendMail({
