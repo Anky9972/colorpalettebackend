@@ -1,5 +1,6 @@
 
-
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -62,6 +63,70 @@ exports.login = async (req, res) => {
     }
 };
 
+exports.verifyGoogleToken = async (req, res) => {
+    console.log("google auth called")
+    const { credential } = req.body;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID
+      });
+      
+      const payload = ticket.getPayload();
+      
+      // Split name or provide defaults
+      const nameParts = payload['name'].split(' ');
+      const firstname = nameParts[0] || 'Google';
+      const lastname = nameParts.slice(1).join(' ') || 'User';
+      
+      // Find or create user
+      let user = await User.findOne({ 
+        $or: [
+          { email: payload['email'] },
+          { googleId: payload['sub'] }
+        ]
+      });
+      
+      if (!user) {
+        user = new User({
+          email: payload['email'],
+          firstname: firstname,
+          lastname: lastname,
+          googleId: payload['sub'],
+          authMethod: 'google',
+          // Optional: set an unguessable temporary password for google users
+          password: Math.random().toString(36).slice(-8)
+        });
+        await user.save();
+      }
+  
+      // Generate JWT
+      const token = jwt.sign(
+        { 
+          id: user._id, 
+          email: user.email,
+          firstname: user.firstname,
+          lastname: user.lastname
+        }, 
+        process.env.JWT_SECRET, 
+        { expiresIn: '1h' }
+      );
+      
+      res.json({ 
+        token, 
+        user: { 
+          id: user._id, 
+          email: user.email,
+          firstname: user.firstname,
+          lastname: user.lastname
+        }
+      });
+    } catch (error) {
+      console.error('Google Auth Error:', error);
+      res.status(401).json({ error: 'Authentication failed', details: error.message });
+    }
+  };
+  
 
 exports.savePalette = async (req, res) => {
     try {

@@ -1,5 +1,3 @@
-// models/User.js
-
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
@@ -18,16 +16,32 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {
+      return this.authMethod === 'local';
+    }
   },
-  resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date },
+  authMethod: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  resetPasswordToken: { 
+    type: String 
+  },
+  resetPasswordExpires: { 
+    type: Date 
+  },
   saved: {
     type: [String],
   },
   savefullpalette: {
     type: [[]],
-  },
+  }
 });
 
 module.exports = mongoose.model("User", UserSchema);
